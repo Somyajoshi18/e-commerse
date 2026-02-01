@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E-commerce Product Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+        }
+
+        .card h3 {
+            margin: 0 0 10px;
+            color: #222;
+        }
+
+        .price {
+            color: #2e8b57;
+            font-weight: bold;
+        }
+
+        .rating {
+            color: #ff9800;
+        }
+
+        .category {
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🛒 Product Listing</h1>
+
+<div class="controls">
+    <select id="sort" onchange="applySort()">
+        <option value="">Sort By</option>
+        <option value="priceAsc">Price ↑</option>
+        <option value="priceDesc">Price ↓</option>
+        <option value="nameAsc">Name A–Z</option>
+        <option value="nameDesc">Name Z–A</option>
+        <option value="ratingAsc">Rating ↑</option>
+        <option value="ratingDesc">Rating ↓</option>
+    </select>
+
+    <select id="filter" onchange="applyFilter()">
+        <option value="All">All Categories</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Clothing">Clothing</option>
+        <option value="Books">Books</option>
+        <option value="Accessories">Accessories</option>
+    </select>
+</div>
+
+<div class="products" id="productList"></div>
+
+<script>
+    const products = [
+        {name:"Smartphone", price:15000, rating:4.5, category:"Electronics"},
+        {name:"Laptop", price:55000, rating:4.7, category:"Electronics"},
+        {name:"Headphones", price:2000, rating:4.2, category:"Electronics"},
+        {name:"Smart Watch", price:3500, rating:4.1, category:"Electronics"},
+        {name:"T-Shirt", price:600, rating:4.0, category:"Clothing"},
+        {name:"Jeans", price:1800, rating:4.3, category:"Clothing"},
+        {name:"Jacket", price:3000, rating:4.4, category:"Clothing"},
+        {name:"Sneakers", price:2500, rating:4.6, category:"Clothing"},
+        {name:"Novel", price:400, rating:4.1, category:"Books"},
+        {name:"Textbook", price:900, rating:4.5, category:"Books"},
+        {name:"Comics", price:300, rating:3.9, category:"Books"},
+        {name:"Notebook", price:150, rating:4.0, category:"Books"},
+        {name:"Wallet", price:700, rating:4.2, category:"Accessories"},
+        {name:"Backpack", price:2200, rating:4.6, category:"Accessories"},
+        {name:"Sunglasses", price:1200, rating:4.3, category:"Accessories"},
+        {name:"Watch", price:5000, rating:4.5, category:"Accessories"},
+        {name:"Bluetooth Speaker", price:2800, rating:4.4, category:"Electronics"},
+        {name:"Cap", price:400, rating:3.8, category:"Accessories"},
+        {name:"Kurta", price:1600, rating:4.2, category:"Clothing"},
+        {name:"E-Book", price:250, rating:4.1, category:"Books"}
+    ];
+
+    let displayProducts = [...products];
+
+    function renderProducts() {
+        const list = document.getElementById("productList");
+        list.innerHTML = "";
+
+        displayProducts.forEach(p => {
+            list.innerHTML += `
+                <div class="card">
+                    <h3>${p.name}</h3>
+                    <p class="price">₹${p.price}</p>
+                    <p class="rating">⭐ ${p.rating}</p>
+                    <p class="category">${p.category}</p>
+                </div>
+            `;
+        });
+    }
+
+    function applySort() {
+        const value = document.getElementById("sort").value;
+
+        if (value === "priceAsc") displayProducts.sort((a,b)=>a.price-b.price);
+        if (value === "priceDesc") displayProducts.sort((a,b)=>b.price-a.price);
+        if (value === "nameAsc") displayProducts.sort((a,b)=>a.name.localeCompare(b.name));
+        if (value === "nameDesc") displayProducts.sort((a,b)=>b.name.localeCompare(a.name));
+        if (value === "ratingAsc") displayProducts.sort((a,b)=>a.rating-b.rating);
+        if (value === "ratingDesc") displayProducts.sort((a,b)=>b.rating-a.rating);
+
+        renderProducts();
+    }
+
+    function applyFilter() {
+        const category = document.getElementById("filter").value;
+
+        displayProducts = category === "All"
+            ? [...products]
+            : products.filter(p => p.category === category);
+
+        applySort();
+    }
+
+    renderProducts();
+</script>
+
+</body>
+</html>
